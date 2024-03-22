@@ -1,6 +1,6 @@
-# Real-Terrain-Generator
-- OpenGL
-- OpenCV
+# Realistic-Terrain-Generator
+- **OpenGL**
+- **OpenCV**
 
 ## Now
 - **Cameras、vertex shader、fragment shader**
