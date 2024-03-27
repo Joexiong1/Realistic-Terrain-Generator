@@ -20,8 +20,10 @@ void processInput(GLFWwindow* window);
 // 设置
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
 int useWireframe = 0;
 int displayGrayscale = 0;
+
 
 // 相机
 Camera camera(glm::vec3(67.0f, 627.5f, 169.9f),
@@ -87,14 +89,14 @@ int main()
         std::cout << "tiff数据读取失败" << std::endl;
     }
 
-    height = image.rows;  // 获取行数
-    width = image.cols;  // 获取列数
+    height = 500;  // 获取行数   image.rows
+    width = 500;  // 获取列数    image.cols
     //nrChannels = image.channels();   获取通道数
 
 
     // 设置顶点数据并配置顶点属性
     std::vector<float> vertices;
-    float yScale = 64.0f / 256.0f, yShift = 16.0f;        //归一化和偏移量
+    float yScale = 48.0f / 256.0f, yShift = 16.0f;        //归一化和偏移量
     int rez = 1;
     for (int i = 0; i < height; i++)
     {
@@ -179,7 +181,7 @@ int main()
 
         // 渲染
         glBindVertexArray(terrainVAO);
-        //        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);        //线框模式
         for (unsigned strip = 0; strip < numStrips; strip++)
         {
             glDrawElements(GL_TRIANGLE_STRIP,   // primitive type
@@ -204,8 +206,7 @@ int main()
     return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly    键盘事件
 void processInput(GLFWwindow* window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
@@ -238,6 +239,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
         case GLFW_KEY_SPACE:
             useWireframe = 1 - useWireframe;
+            if(useWireframe)
+                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);        //线框模式
+            else
+                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);       //取消线框模式
             break;
         case GLFW_KEY_G:
             displayGrayscale = 1 - displayGrayscale;
@@ -268,8 +273,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called  滚动回调函数
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
     camera.ProcessMouseScroll(yoffset);

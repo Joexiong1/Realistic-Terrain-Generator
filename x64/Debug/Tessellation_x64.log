@@ -1,15 +1,15 @@
 ﻿  test.cpp
 D:\opencv\opencv\build\include\opencv2\objdetect\aruco_board.hpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(116,28): warning C4018: “<”: 有符号/无符号不匹配
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(118,32): warning C4018: “<”: 有符号/无符号不匹配
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(153,28): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(183,40): warning C4018: “<”: 有符号/无符号不匹配
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(83,24): warning C4101: “nrChannels”: 未引用的局部变量
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(257,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(258,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(262,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(263,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(265,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(266,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(275,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(118,28): warning C4018: “<”: 有符号/无符号不匹配
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(120,32): warning C4018: “<”: 有符号/无符号不匹配
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(155,28): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(185,40): warning C4018: “<”: 有符号/无符号不匹配
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(85,24): warning C4101: “nrChannels”: 未引用的局部变量
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(262,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(263,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(267,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(268,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(270,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(271,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\test.cpp(279,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
   Tessellation_x64.vcxproj -> E:\something\vsproject\Tessellation_x64\x64\Debug\Tessellation_x64.exe
