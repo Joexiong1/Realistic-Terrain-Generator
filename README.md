@@ -1,10 +1,11 @@
 # Realistic-Terrain-Generator
 - **OpenGL**
-- **OpenCV**
+- **OpenCV**(optional)
 
 ## Now
 - **Cameras、vertex shader、fragment shader**
 - **Import height map to generate terrain**
+- **Dynamic levels of detail by using Tessellation Shader**
 
 ## Control/Input:
 ```
