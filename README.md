@@ -14,3 +14,6 @@ Mouse wheel - zoom
 Space - enabled/disabled wireframe mode
 ESC - exit
 ```
+
+## Requirements：
+- Efficient graphics card that support OpenGL 4.1

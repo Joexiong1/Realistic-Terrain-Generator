@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="test.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
@@ -23,14 +23,29 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="shader_m.h">
+    <ClInclude Include="shader_t.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="gpuheight.tes">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="gpuheight.tcs">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shader_m.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="gpuheight.fs">
+      <Filter>头文件</Filter>
+    </None>
+    <None Include="gpuheight.vs">
+      <Filter>头文件</Filter>
+    </None>
     <None Include="shader.fs">
       <Filter>头文件</Filter>
     </None>

@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\opencv\opencv\build\include\opencv2;D:\opencv\opencv\build\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glad\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glfw\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\opencv\opencv\build\include\opencv2;D:\opencv\opencv\build\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glad\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glfw\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\stb_image\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -134,13 +134,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="glad.c" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="shader_m.h" />
+    <ClInclude Include="shader_t.h" />
+    <ClInclude Include="gpuheight.tes" />
+    <ClInclude Include="gpuheight.tcs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="gpuheight.fs" />
+    <None Include="gpuheight.vs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
   </ItemGroup>

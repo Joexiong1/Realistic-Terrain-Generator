@@ -4,8 +4,11 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "shader_m.h"
+#include "shader_t.h"
 #include "camera.h"
+#define STB_IMAGE_IMPLEMENTATION
+
+#include "stb_image.h"
 
 #include <iostream>
 #include <vector>
@@ -20,13 +23,15 @@ void processInput(GLFWwindow* window);
 // 设置
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+const unsigned int NUM_PATCH_PTS = 4;
+
 
 int useWireframe = 0;
 int displayGrayscale = 0;
 
 
 // 相机
-Camera camera(glm::vec3(67.0f, 627.5f, 169.9f),
+Camera camera(glm::vec3(67.0f, 200.5f, 169.9f),
     glm::vec3(0.0f, 1.0f, 0.0f),
     -128.1f, -42.4f);
 float lastX = SCR_WIDTH / 2.0f;
@@ -42,8 +47,8 @@ int main()
     // glfw初始化和配置
     // ------------------------------
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 #ifdef __APPLE__
@@ -51,7 +56,7 @@ int main()
 #endif
 
     // 创建窗口
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Terrain CPU", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Terrain Tessellation", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -74,81 +79,101 @@ int main()
         return -1;
     }
 
+    GLint maxTessLevel;
+    glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &maxTessLevel);
+    std::cout << "Max available tess level: " << maxTessLevel << std::endl;
+
+
     // 配置全局opengl状态
     glEnable(GL_DEPTH_TEST);
 
     // 构建并编译着色器程序
-    Shader heightMapShader("shader.vs", "shader.fs");
+    Shader tessHeightMapShader("gpuheight.vs","gpuheight.fs",nullptr,"gpuheight.tcs","gpuheight.tes");
 
     // 加载并创建纹理
     // 创建纹理并生成 mipmaps
-    int width, height, nrChannels;
-    cv::Mat image = cv::imread("C:\\Users\\Administrator\\Desktop\\FuJian_DEM.png", cv::IMREAD_ANYDEPTH);
-    if (image.empty()) {
-        // 处理读取失败的情况
-        std::cout << "tiff数据读取失败" << std::endl;
-    }
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+    // 设置纹理环绕参数
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // 设置纹理过滤参数
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    int width, height, nrChannels; 
+    unsigned char* data = stbi_load("C:\\Users\\Administrator\\Desktop\\FuJian_DEM.png", &width, &height, &nrChannels, 0);
+    if (data)
+    {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
 
-    height = 500;  // 获取行数   image.rows
-    width = 500;  // 获取列数    image.cols
+        tessHeightMapShader.setInt("heightMap", 0);
+        std::cout << "Loaded heightmap of size " << height << " x " << width << std::endl;
+    }
+    else
+    {
+        std::cout << "Failed to load texture" << std::endl;
+    }
+    stbi_image_free(data);
+
     //nrChannels = image.channels();   获取通道数
+ 
 
-
-    // 设置顶点数据并配置顶点属性
     std::vector<float> vertices;
-    float yScale = 48.0f / 256.0f, yShift = 16.0f;        //归一化和偏移量
-    int rez = 1;
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            // 获取指定位置的高度值
-            uchar y = image.ptr<uchar>(i, j)[0];
 
-            // vertex
-            vertices.push_back(-height / 2.0f + height * i / (float)height);   // vx
-            vertices.push_back((int)y * yScale - yShift);   // vy
-            vertices.push_back(-width / 2.0f + width * j / (float)width);   // vz
+    unsigned rez = 20;
+    for (unsigned i = 0; i <= rez - 1; i++)
+    {
+        for (unsigned j = 0; j <= rez - 1; j++)
+        {
+            vertices.push_back(-width / 2.0f + width * i / (float)rez); // v.x
+            vertices.push_back(0.0f); // v.y
+            vertices.push_back(-height / 2.0f + height * j / (float)rez); // v.z
+            vertices.push_back(i / (float)rez); // u
+            vertices.push_back(j / (float)rez); // v
+
+            vertices.push_back(-width / 2.0f + width * (i + 1) / (float)rez); // v.x
+            vertices.push_back(0.0f); // v.y
+            vertices.push_back(-height / 2.0f + height * j / (float)rez); // v.z
+            vertices.push_back((i + 1) / (float)rez); // u
+            vertices.push_back(j / (float)rez); // v
+
+            vertices.push_back(-width / 2.0f + width * i / (float)rez); // v.x
+            vertices.push_back(0.0f); // v.y
+            vertices.push_back(-height / 2.0f + height * (j + 1) / (float)rez); // v.z
+            vertices.push_back(i / (float)rez); // u
+            vertices.push_back((j + 1) / (float)rez); // v
+
+            vertices.push_back(-width / 2.0f + width * (i + 1) / (float)rez); // v.x
+            vertices.push_back(0.0f); // v.y
+            vertices.push_back(-height / 2.0f + height * (j + 1) / (float)rez); // v.z
+            vertices.push_back((i + 1) / (float)rez); // u
+            vertices.push_back((j + 1) / (float)rez); // v
         }
     }
-    std::cout << "Loaded " << vertices.size() / 3 << " vertices" << std::endl;
+    std::cout << "Loaded " << rez * rez << " patches of 4 control points each" << std::endl;
+    std::cout << "Processing " << rez * rez * 4 << " vertices in vertex shader" << std::endl;
 
-    //每个矩形两个三角形
-    std::vector<unsigned> indices;
-    for (unsigned i = 0; i < height - 1; i += rez)
-    {
-        for (unsigned j = 0; j < width; j += rez)
-        {
-            for (unsigned k = 0; k < 2; k++)
-            {
-                indices.push_back(j + width * (i + k * rez));
-            }
-        }
-    }
-    std::cout << "Loaded " << indices.size() << " indices" << std::endl;
-
-    const int numStrips = (height - 1) / rez;
-    const int numTrisPerStrip = (width / rez) * 2 - 2;
-    std::cout << "Created lattice of " << numStrips << " strips with " << numTrisPerStrip << " triangles each" << std::endl;
-    std::cout << "Created " << numStrips * numTrisPerStrip << " triangles total" << std::endl;
-
-    // 配置VAO (terrainVBO + terrainIBO)
-    unsigned int terrainVAO, terrainVBO, terrainIBO;
+    // first, configure the cube's VAO (and terrainVBO)
+    unsigned int terrainVAO, terrainVBO;
     glGenVertexArrays(1, &terrainVAO);
     glBindVertexArray(terrainVAO);
 
     glGenBuffers(1, &terrainVBO);
     glBindBuffer(GL_ARRAY_BUFFER, terrainVBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
-    // 位置属性
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    // position attribute
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+    // texCoord attribute
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
+    glEnableVertexAttribArray(1);
 
-    glGenBuffers(1, &terrainIBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, terrainIBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned), &indices[0], GL_STATIC_DRAW);
-
+    glPatchParameteri(GL_PATCH_VERTICES, NUM_PATCH_PTS);
     // 渲染循环
     while (!glfwWindowShouldClose(window))
     {
@@ -167,28 +192,21 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // 激活着色器
-        heightMapShader.use();
+        tessHeightMapShader.use();
 
         // 视图/投影转换
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
         glm::mat4 view = camera.GetViewMatrix();
-        heightMapShader.setMat4("projection", projection);
-        heightMapShader.setMat4("view", view);
+        tessHeightMapShader.setMat4("projection", projection);
+        tessHeightMapShader.setMat4("view", view);
 
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
-        heightMapShader.setMat4("model", model);
+        tessHeightMapShader.setMat4("model", model);
 
         // 渲染
         glBindVertexArray(terrainVAO);
-        //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);        //线框模式
-        for (unsigned strip = 0; strip < numStrips; strip++)
-        {
-            glDrawElements(GL_TRIANGLE_STRIP,   // primitive type
-                numTrisPerStrip + 2,   // number of indices to render
-                GL_UNSIGNED_INT,     // index data type
-                (void*)(sizeof(unsigned) * (numTrisPerStrip + 2) * strip)); // offset to starting index
-        }
+        glDrawArrays(GL_PATCHES, 0, NUM_PATCH_PTS * rez * rez);
 
         // glfw: 交换缓冲区和轮询IO事件
         glfwSwapBuffers(window);
@@ -199,7 +217,6 @@ int main()
     // ------------------------------------------------------------------------
     glDeleteVertexArrays(1, &terrainVAO);
     glDeleteBuffers(1, &terrainVBO);
-    glDeleteBuffers(1, &terrainIBO);
 
     // glfw: terminate, clearing all previously allocated GLFW resources.
     glfwTerminate();
