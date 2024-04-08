@@ -1,11 +1,12 @@
 ﻿  main.cpp
-D:\opencv\opencv\build\include\opencv2\objdetect\aruco_board.hpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(180,28): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(279,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(280,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(284,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(285,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(287,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(288,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
-E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(296,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\opencv\build\include\opencv2\objdetect\aruco_board.hpp(1,1): warning C4819: 该文件包含不能在当前代码页(936)中表示的字符。请将该文件保存为 Unicode 格式以防止数据丢失
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(183,28): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(290,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(291,17): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(295,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(296,19): warning C4244: “初始化”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(298,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(299,13): warning C4244: “=”: 从“double”转换到“float”，可能丢失数据
+E:\something\vsproject\Tessellation_x64\Tessellation_x64\main.cpp(307,31): warning C4244: “参数”: 从“double”转换到“float”，可能丢失数据
+LINK : warning LNK4098: 默认库“MSVCRT”与其他库的使用冲突；请使用 /NODEFAULTLIB:library
   Tessellation_x64.vcxproj -> E:\something\vsproject\Tessellation_x64\x64\Debug\Tessellation_x64.exe

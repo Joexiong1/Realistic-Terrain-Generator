@@ -107,12 +107,12 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\opencv\opencv\build\include\opencv2;D:\opencv\opencv\build\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glad\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glfw\include;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\stb_image\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Tessellation_x64\dependencies\opencv\build\include\opencv2;$(SolutionDir)Tessellation_x64\dependencies\opencv\build\include;$(SolutionDir)Tessellation_x64\dependencies\glad\include;$(SolutionDir)Tessellation_x64\dependencies\glfw\include;$(SolutionDir)Tessellation_x64\dependencies;$(SolutionDir)Tessellation_x64\dependencies\stb_image\stb;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\opencv\opencv\build\x64\vc16\lib;E:\something\vsproject\Tessellation_x64\Tessellation_x64\dependencies\glfw\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)opencv\build\x64\vc16\lib;$(SolutionDir)Tessellation_x64\dependencies\glfw\lib-vc2022;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opencv_world470d.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

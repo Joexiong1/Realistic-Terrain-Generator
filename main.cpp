@@ -21,17 +21,20 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
 // 设置
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1600;
+const unsigned int SCR_HEIGHT = 1200;
 const unsigned int NUM_PATCH_PTS = 4;
 
+//视锥
+int outOfFrustumTessLevel = 0;
+float fovScale = 0.75f;
 
 int useWireframe = 0;
 int displayGrayscale = 0;
 
 
 // 相机
-Camera camera(glm::vec3(67.0f, 200.5f, 169.9f),
+Camera camera(glm::vec3(67.0f, 400.5f, 169.9f),
     glm::vec3(0.0f, 1.0f, 0.0f),
     -128.1f, -42.4f);
 float lastX = SCR_WIDTH / 2.0f;
@@ -104,7 +107,7 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
     int width, height, nrChannels; 
-    unsigned char* data = stbi_load("C:\\Users\\Administrator\\Desktop\\FuJian_DEM.png", &width, &height, &nrChannels, 0);
+    unsigned char* data = stbi_load("./iceland_heightmap.png", &width, &height, &nrChannels, 0);
     if (data)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
@@ -124,7 +127,7 @@ int main()
 
     std::vector<float> vertices;
 
-    unsigned rez = 20;
+    unsigned rez = 40;
     for (unsigned i = 0; i <= rez - 1; i++)
     {
         for (unsigned j = 0; j <= rez - 1; j++)
@@ -180,6 +183,7 @@ int main()
         float currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+       
 
         //        std::cout << deltaTime << "ms (" << 1.0f / deltaTime << " FPS)" << std::endl;
 
@@ -194,6 +198,7 @@ int main()
         // 激活着色器
         tessHeightMapShader.use();
 
+
         // 视图/投影转换
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
         glm::mat4 view = camera.GetViewMatrix();
@@ -203,6 +208,12 @@ int main()
         // world transformation
         glm::mat4 model = glm::mat4(1.0f);
         tessHeightMapShader.setMat4("model", model);
+
+        //视锥
+        float fov = glm::radians(camera.Zoom);
+        float fovCos = glm::cos(fov);
+        tessHeightMapShader.setFloat("fovCos", fovCos);
+        tessHeightMapShader.setInt("outOfFrustumTessLevel", outOfFrustumTessLevel);
 
         // 渲染
         glBindVertexArray(terrainVAO);
